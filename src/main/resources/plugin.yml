@@ -1,0 +1,24 @@
+name: PunishGUI
+version: '${project.version}'
+main: me.monkeykiller.punishgui.Main
+api-version: 1.18
+depend: [ Atlas ]
+authors: [ MonkeyKiller ]
+
+commands:
+  helloworld:
+    description: "Displays a hello world message, yeah... thats it..."
+    aliases: [hw]
+  punishgui:
+    description: "Plugin's main command"
+  punish:
+    description: "Opens the gui to affect the selected victim"
+permissions:
+  punishgui.opengui:
+    description: "Access to open the gui and use the punishes"
+  punishgui.command.getitem:
+    description: "Access to get the item to open the gui (unusable if you don't have the opengui permission)"
+  punishgui.command.checkitem:
+    description: "Acces to check if the selected item is able to open the gui"
+    default: true
+

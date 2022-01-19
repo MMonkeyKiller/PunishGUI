@@ -1,12 +1,13 @@
 package me.monkeykiller.punishgui.commands;
 
 import com.dndcraft.command.annotations.Arg;
+import me.monkeykiller.punishgui.menus.PunishMenu;
 import me.monkeykiller.punishgui.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class PunishCommand extends BaseCommand{
-    public void invoke(Player player, @Arg(value="target") String targetSel) {
+public class PunishCommand extends BaseCommand {
+    public void invoke(Player player, @Arg(value = "target") String targetSel) {
         if (!player.hasPermission("punishgui.opengui")) {
             Utils.errorMsg("You don't have permissions to execute this command!").send(getSender());
             return;
@@ -16,6 +17,6 @@ public class PunishCommand extends BaseCommand{
             Utils.errorMsg("Player with name \"" + targetSel + "\" not found");
             return;
         }
-        // TODO: Open punish gui
+        PunishMenu.openMenu(player, target);
     }
 }

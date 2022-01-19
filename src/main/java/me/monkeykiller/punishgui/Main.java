@@ -5,8 +5,13 @@ import com.dndcraft.command.exception.InvalidPluginCommandException;
 import me.monkeykiller.punishgui.commands.HelloWorldCommand;
 import me.monkeykiller.punishgui.commands.MainCommand;
 import me.monkeykiller.punishgui.commands.PunishCommand;
+import me.monkeykiller.punishgui.listeners.MainListener;
+import me.monkeykiller.punishgui.punishes.*;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.Map;
 
 public final class Main extends JavaPlugin {
@@ -20,8 +25,10 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        Bukkit.getPluginManager().registerEvents(new MainListener(), this);
         setupCommands();
-        Utils.log("&aAtlas Test Plugin by MonkeyKiller");
+        setupPunishes();
+        Utils.log("&aPunishGUI&8> &7Plugin started!");
     }
 
     @Override
@@ -40,5 +47,21 @@ public final class Main extends JavaPlugin {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void setupPunishes() {
+        List<Punish> punishes = List.of(
+                new BedrockCagePunish(),
+                new LaunchPunish(),
+                new StrikePunish(),
+                new InfiniteFallPunish(),
+                new FreezePunish(),
+                new CreeperPunish()
+        );
+        for (Punish punish : punishes) {
+            Punish.register(punish);
+            if (punish instanceof Listener listener)
+                Bukkit.getPluginManager().registerEvents(listener, this);
+        }
     }
 }

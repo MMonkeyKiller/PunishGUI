@@ -1,8 +1,8 @@
 package me.monkeykiller.punishgui.commands;
 
-import com.dndcraft.agnostic.CommonComponentBuilder;
 import com.dndcraft.command.annotations.Cmd;
 import com.dndcraft.util.AtlasColor;
+import com.dndcraft.util.BukkitComponentBuilder;
 import com.dndcraft.util.ItemUtil;
 import me.monkeykiller.punishgui.Utils;
 import net.kyori.adventure.text.Component;
@@ -41,27 +41,25 @@ public class MainCommand extends BaseCommand {
         }
         PlayerInventory inv = player.getInventory();
         for (ItemStack item : List.of(inv.getItemInMainHand(), inv.getItemInOffHand())) {
-            if (item == null || item.getType().isAir()) continue;
-            if (ItemUtil.getByteTag(item, "OpenPunishGUI") == 0) continue;
-            player.sendMessage(Component.text("✔ The current item is able to open the gui", AtlasColor.LIME.toTextColor()));
+            if (!Utils.isGUIOpener(item)) continue;
+            Utils.successMsg("The current item is able to open the gui").send(getSender());
             return;
         }
         Utils.errorMsg("You are not holding any item able to open the gui").send(getSender());
     }
 
-    private CommonComponentBuilder help() {
+    private BukkitComponentBuilder help() {
         Map<String, String> cmds = Map.of(
                 "/punishgui", "Plugin's main command",
                 "/punishgui getitem", "Create a clickable item to open the gui",
                 "/punishgui checkitem", "Check if the current item is able to open the gui",
                 "/punish <player>", "Opens the punish gui for the selected victim"
         );
-        var builder = new CommonComponentBuilder().append("Plugin Commands:").newline();
-        cmds.forEach((cmd, desc) -> builder.append("> ", AtlasColor.DARK_GRAY)
-                .append(new CommonComponentBuilder().append(cmd, AtlasColor.LIME).onClickCopyToClipboard(cmd).build())
-                .append(": " + desc, AtlasColor.GRAY)
-                .newline());
-
+        var builder = Utils.builder().append("Plugin Commands:");
+        cmds.forEach((cmd, desc) -> builder.newline()
+                .append("> ", AtlasColor.DARK_GRAY)
+                .append(Utils.builder().append(cmd, AtlasColor.LIME).onClickCopyToClipboard(cmd).build())
+                .append(": " + desc, AtlasColor.GRAY));
         return builder;
     }
 }

@@ -3,12 +3,15 @@ package me.monkeykiller.punishgui;
 import com.dndcraft.AtlasPaper;
 import com.dndcraft.util.AtlasColor;
 import com.dndcraft.util.BukkitComponentBuilder;
+import com.dndcraft.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +50,21 @@ public class Utils {
         return builder().append("✖ ").append(component).color(AtlasColor.ERROR_RED);
     }
 
+    public static BukkitComponentBuilder successMsg(@NotNull String text) {
+        return successMsg(Component.text(text));
+    }
+
+    public static BukkitComponentBuilder successMsg(@NotNull Component component) {
+        return builder().append("✔ ").append(component).color(AtlasColor.LIME);
+    }
+
     public static BukkitComponentBuilder builder() {
         return AtlasPaper.get().componentBuilder();
+    }
+
+    public static boolean isGUIOpener(@Nullable ItemStack item) {
+        if (item == null || item.getType().isAir()) return false;
+        if (!ItemUtil.hasTag(item, "OpenPunishGUI")) return false;
+        return ItemUtil.getByteTag(item, "OpenPunishGUI") != 0;
     }
 }
